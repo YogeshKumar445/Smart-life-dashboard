@@ -14,8 +14,10 @@ function Login() {
       localStorage.setItem("token", res.data.token);
       navigate("/dashboard");
     } catch (err) {
-  alert(err.response?.data?.message || "Login failed");
+  console.error("LOGIN ERROR 👉", err.response?.data || err.message);
+  alert("Login failed - check console");
 }
+
 
   };
 

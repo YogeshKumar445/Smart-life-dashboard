@@ -1,11 +1,12 @@
 const express = require("express");
-const router = express.Router();
 const authMiddleware = require("../middleware/authMiddleware");
+
+const router = express.Router();
 
 router.get("/", authMiddleware, (req, res) => {
   res.json({
-    message: "Welcome to Smart Life Dashboard",
-    user: req.user
+    message: "Welcome to Dashboard",
+    userId: req.user.id,
   });
 });
 

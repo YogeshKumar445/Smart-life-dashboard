@@ -1,20 +1,25 @@
 require("dotenv").config();
+
 const express = require("express");
+const cors = require("cors");
+
 const connectDB = require("./config/db");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 
+const app = express();          // ✅ pehle app banao
 
-const app = express();
+// ✅ CORS after app initialization
+app.use(cors({
+  origin: "http://localhost:5173"
+}));
+
 connectDB();
-
-
 
 app.use(express.json());
 
-// 🔥 INLINE REQUIRE (IMPORTANT)
+// routes
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/dashboard", dashboardRoutes);
-
 
 app.get("/", (req, res) => {
   res.send("Smart Life Dashboard Backend Running");
