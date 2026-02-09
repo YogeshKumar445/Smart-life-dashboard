@@ -7,6 +7,8 @@ const dashboardRoutes = require("./routes/dashboardRoutes");
 const app = express();
 connectDB();
 
+
+
 app.use(express.json());
 
 // 🔥 INLINE REQUIRE (IMPORTANT)
