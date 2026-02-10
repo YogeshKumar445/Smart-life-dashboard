@@ -1,55 +1,56 @@
-import { useEffect, useState } from "react";
-import API from "../services/api";
+import React from "react";
 
 function Dashboard() {
-  const [stats, setStats] = useState(null);
-
   const logout = () => {
     localStorage.removeItem("token");
     window.location.href = "/";
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await API.get("/dashboard");
-        setStats(res.data);
-      } catch (err) {
-        console.log(err);
-        logout();
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (!stats) {
-    return <p className="p-6">Loading...</p>;
-  }
+  // Dummy data (baad me API se aa jayega)
+  const stats = [
+    { title: "Total Tasks", value: 12, color: "bg-blue-500" },
+    { title: "Completed", value: 7, color: "bg-green-500" },
+    { title: "Pending", value: 5, color: "bg-yellow-500" },
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-600 to-purple-700 p-6 text-white">
-      <div className="flex justify-between mb-10">
-        <h1 className="text-3xl font-bold">Smart Life Dashboard</h1>
-        <button onClick={logout} className="bg-white text-indigo-600 px-4 py-2 rounded">
+    <div className="min-h-screen bg-gray-100">
+      {/* Navbar */}
+      <div className="bg-white shadow px-6 py-4 flex justify-between items-center">
+        <h1 className="text-2xl font-bold text-indigo-600">
+          Smart Life Dashboard
+        </h1>
+        <button
+          onClick={logout}
+          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg"
+        >
           Logout
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white text-black p-6 rounded-xl">
-          <h3>Total Tasks</h3>
-          <p className="text-4xl font-bold">{stats.total}</p>
-        </div>
+      {/* Content */}
+      <div className="p-6">
+        {/* Welcome */}
+        <h2 className="text-2xl font-semibold mb-1">
+          Welcome back 👋
+        </h2>
+        <p className="text-gray-600 mb-6">
+          Here is your smart life overview
+        </p>
 
-        <div className="bg-white text-black p-6 rounded-xl">
-          <h3>Completed</h3>
-          <p className="text-4xl font-bold">{stats.completed}</p>
-        </div>
-
-        <div className="bg-white text-black p-6 rounded-xl">
-          <h3>Pending</h3>
-          <p className="text-4xl font-bold">{stats.pending}</p>
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {stats.map((item, index) => (
+            <div
+              key={index}
+              className={`${item.color} text-white p-6 rounded-xl shadow-lg`}
+            >
+              <p className="text-lg">{item.title}</p>
+              <h3 className="text-4xl font-bold mt-2">
+                {item.value}
+              </h3>
+            </div>
+          ))}
         </div>
       </div>
     </div>
