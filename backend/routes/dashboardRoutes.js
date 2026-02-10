@@ -1,12 +1,13 @@
 const express = require("express");
-const authMiddleware = require("../middleware/authMiddleware");
-
+const auth = require("../middleware/authMiddleware");
 const router = express.Router();
 
-router.get("/", authMiddleware, (req, res) => {
+router.get("/", auth, (req, res) => {
   res.json({
-    message: "Welcome to Dashboard",
-    userId: req.user.id,
+    total: 12,
+    completed: 7,
+    pending: 5,
+    user: req.user
   });
 });
 
