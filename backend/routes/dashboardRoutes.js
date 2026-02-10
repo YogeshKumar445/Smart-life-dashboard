@@ -1,13 +1,17 @@
 const express = require("express");
-const auth = require("../middleware/authMiddleware");
+const authMiddleware = require("../middleware/authMiddleware");
+
 const router = express.Router();
 
-router.get("/", auth, (req, res) => {
+router.get("/stats", authMiddleware, (req, res) => {
   res.json({
     total: 12,
     completed: 7,
     pending: 5,
-    user: req.user
+    user: {
+      id: req.user.id,
+      email: req.user.email,
+    },
   });
 });
 
