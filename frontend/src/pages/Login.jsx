@@ -4,6 +4,7 @@ import { loginUser } from "../api/api";
 
 const Login = () => {
   const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -17,9 +18,9 @@ const Login = () => {
         localStorage.setItem("token", data.token);
         navigate("/dashboard");
       } else {
-        alert("Invalid Credentials");
+        alert(data.message || "Invalid Credentials");
       }
-    } catch (err) {
+    } catch (error) {
       alert("Login Failed");
     }
   };
@@ -37,18 +38,25 @@ const Login = () => {
         <input
           type="email"
           placeholder="Email"
-          className="w-full p-3 mb-4 rounded-lg"
+          className="w-full p-3 mb-4 rounded-lg focus:outline-none"
+          value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
 
         <input
           type="password"
           placeholder="Password"
-          className="w-full p-3 mb-6 rounded-lg"
+          className="w-full p-3 mb-6 rounded-lg focus:outline-none"
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
 
-        <button className="w-full bg-white text-indigo-600 py-3 rounded-lg font-bold hover:scale-105 transition-all">
+        <button
+          type="submit"
+          className="w-full bg-white text-indigo-600 py-3 rounded-lg font-bold hover:scale-105 transition-all duration-300"
+        >
           Login
         </button>
 
