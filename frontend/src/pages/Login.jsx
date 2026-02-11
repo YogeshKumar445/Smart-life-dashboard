@@ -1,80 +1,66 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import API from "../services/api";
+import { useNavigate, Link } from "react-router-dom";
+import { loginUser } from "../api/api";
 
-function Login() {
+const Login = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
     try {
-      const res = await API.post("/auth/login", { email, password });
-      localStorage.setItem("token", res.data.token);
-      navigate("/dashboard");
+      const data = await loginUser(email, password);
+
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        navigate("/dashboard");
+      } else {
+        alert("Invalid Credentials");
+      }
     } catch (err) {
-      alert("Login failed");
+      alert("Login Failed");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-600 to-purple-700">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
-        
-        {/* Header */}
-        <h1 className="text-3xl font-bold text-center text-gray-800">
-          Smart Life
-        </h1>
-        <p className="text-center text-gray-500 mt-2">
-          Login to your dashboard
+    <div className="h-screen flex items-center justify-center bg-gradient-to-br from-indigo-600 to-purple-600">
+      <form
+        onSubmit={handleLogin}
+        className="bg-white/20 backdrop-blur-lg p-10 rounded-2xl shadow-2xl w-96"
+      >
+        <h2 className="text-white text-3xl font-bold mb-6 text-center">
+          Welcome Back
+        </h2>
+
+        <input
+          type="email"
+          placeholder="Email"
+          className="w-full p-3 mb-4 rounded-lg"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
+        <input
+          type="password"
+          placeholder="Password"
+          className="w-full p-3 mb-6 rounded-lg"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+
+        <button className="w-full bg-white text-indigo-600 py-3 rounded-lg font-bold hover:scale-105 transition-all">
+          Login
+        </button>
+
+        <p className="text-white mt-4 text-center">
+          Don't have an account?{" "}
+          <Link to="/register" className="underline">
+            Register
+          </Link>
         </p>
-
-        {/* Form */}
-        <form onSubmit={handleLogin} className="mt-8 space-y-5">
-          <div>
-            <label className="block text-sm font-medium text-gray-600 mb-1">
-              Email
-            </label>
-            <input
-              type="email"
-              className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-600 mb-1">
-              Password
-            </label>
-            <input
-              type="password"
-              className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition"
-          >
-            Login
-          </button>
-        </form>
-
-        {/* Footer */}
-        <p className="text-center text-sm text-gray-500 mt-6">
-          © 2026 Smart Life Dashboard
-        </p>
-      </div>
+      </form>
     </div>
   );
-}
+};
 
 export default Login;
