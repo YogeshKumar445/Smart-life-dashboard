@@ -83,3 +83,16 @@ export const deleteTask = async (id) => {
     },
   });
 };
+// ================= TASK STATS =================
+export const getTaskStats = async () => {
+  const token = localStorage.getItem("token");
+
+  const res = await fetch("http://localhost:5000/api/tasks/stats", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.json();
+};
+

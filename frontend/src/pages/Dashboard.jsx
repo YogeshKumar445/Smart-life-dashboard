@@ -1,58 +1,86 @@
 import { useEffect, useState } from "react";
-import { getDashboardStats } from "../api/api";
 import DashboardLayout from "../layout/DashboardLayout";
+import { getDashboardStats, getTaskStats } from "../api/api";
+import TaskPieChart from "../components/TaskPieChart";
 
 const Dashboard = () => {
   const [stats, setStats] = useState(null);
+  const [taskStats, setTaskStats] = useState(null);
 
   useEffect(() => {
-    const fetchStats = async () => {
-      const data = await getDashboardStats();
-      setStats(data);
+    const fetchData = async () => {
+      try {
+        const dashboardData = await getDashboardStats();
+        const taskData = await getTaskStats();
+
+        setStats(dashboardData);
+        setTaskStats(taskData);
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      }
     };
 
-    fetchStats();
+    fetchData();
   }, []);
 
   if (!stats) {
     return (
       <DashboardLayout>
-        <p className="text-xl">Loading...</p>
+        <div className="flex justify-center items-center h-64">
+          <p className="text-xl font-semibold animate-pulse">
+            Loading Dashboard...
+          </p>
+        </div>
       </DashboardLayout>
     );
   }
 
   return (
     <DashboardLayout>
-      <div className="grid grid-cols-4 gap-6">
-        <div className="bg-white p-6 rounded-2xl shadow-lg">
-          <h3 className="text-xl font-bold">Health Score</h3>
-          <p className="text-3xl text-indigo-600 mt-4">
+      {/* ===== STATS CARDS ===== */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        {/* Health */}
+        <div className="bg-white p-6 rounded-2xl shadow-lg hover:scale-105 transition-all duration-300">
+          <h3 className="text-gray-500 font-semibold">Health Score</h3>
+          <p className="text-3xl font-bold text-indigo-600 mt-3">
             {stats.health}
           </p>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl shadow-lg">
-          <h3 className="text-xl font-bold">Savings</h3>
-          <p className="text-3xl text-green-600 mt-4">
+        {/* Savings */}
+        <div className="bg-white p-6 rounded-2xl shadow-lg hover:scale-105 transition-all duration-300">
+          <h3 className="text-gray-500 font-semibold">Savings</h3>
+          <p className="text-3xl font-bold text-green-600 mt-3">
             ₹{stats.savings}
           </p>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl shadow-lg">
-          <h3 className="text-xl font-bold">Tasks Done</h3>
-          <p className="text-3xl text-purple-600 mt-4">
+        {/* Completed Tasks */}
+        <div className="bg-white p-6 rounded-2xl shadow-lg hover:scale-105 transition-all duration-300">
+          <h3 className="text-gray-500 font-semibold">Tasks Completed</h3>
+          <p className="text-3xl font-bold text-purple-600 mt-3">
             {stats.tasks}
           </p>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl shadow-lg">
-          <h3 className="text-xl font-bold">Study Hours</h3>
-          <p className="text-3xl text-blue-600 mt-4">
+        {/* Study Hours */}
+        <div className="bg-white p-6 rounded-2xl shadow-lg hover:scale-105 transition-all duration-300">
+          <h3 className="text-gray-500 font-semibold">Study Hours</h3>
+          <p className="text-3xl font-bold text-blue-600 mt-3">
             {stats.studyHours}
           </p>
         </div>
       </div>
+
+      {/* ===== CHART SECTION ===== */}
+      {taskStats && (
+        <div className="mt-10">
+          <TaskPieChart
+            completed={taskStats.completed}
+            pending={taskStats.pending}
+          />
+        </div>
+      )}
     </DashboardLayout>
   );
 };

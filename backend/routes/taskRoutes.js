@@ -74,4 +74,20 @@ router.delete("/:id", protect, async (req, res) => {
   res.json({ message: "Task deleted" });
 });
 
+// GET task stats
+router.get("/stats", protect, async (req, res) => {
+  const completed = await Task.countDocuments({
+    user: req.user._id,
+    completed: true,
+  });
+
+  const pending = await Task.countDocuments({
+    user: req.user._id,
+    completed: false,
+  });
+
+  res.json({ completed, pending });
+});
+
+
 module.exports = router;
