@@ -34,3 +34,52 @@ export const getDashboardStats = async () => {
 
   return res.json();
 };
+// ================= TASKS =================
+export const getTasks = async () => {
+  const token = localStorage.getItem("token");
+
+  const res = await fetch("http://localhost:5000/api/tasks", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.json();
+};
+
+export const createTask = async (taskData) => {
+  const token = localStorage.getItem("token");
+
+  const res = await fetch("http://localhost:5000/api/tasks", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(taskData),
+  });
+
+  return res.json();
+};
+
+export const toggleTask = async (id) => {
+  const token = localStorage.getItem("token");
+
+  await fetch(`http://localhost:5000/api/tasks/${id}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const deleteTask = async (id) => {
+  const token = localStorage.getItem("token");
+
+  await fetch(`http://localhost:5000/api/tasks/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};

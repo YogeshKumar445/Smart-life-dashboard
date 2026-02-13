@@ -24,6 +24,8 @@ app.use(express.json());
 // routes
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/tasks", require("./routes/taskRoutes"));
+
 
 app.get("/", (req, res) => {
   res.send("Smart Life Dashboard Backend Running");
