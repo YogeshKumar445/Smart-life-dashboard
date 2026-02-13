@@ -1,22 +1,30 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../layout/DashboardLayout";
-import { getDashboardStats, getTaskStats } from "../api/api";
+import {
+  getDashboardStats,
+  getTaskStats,
+  getStudyWeekly,
+} from "../api/api";
 import TaskPieChart from "../components/TaskPieChart";
+import StudyBarChart from "../components/StudyBarChart";
 
 const Dashboard = () => {
   const [stats, setStats] = useState(null);
   const [taskStats, setTaskStats] = useState(null);
+  const [studyData, setStudyData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const dashboardData = await getDashboardStats();
         const taskData = await getTaskStats();
+        const weeklyStudy = await getStudyWeekly();
 
         setStats(dashboardData);
         setTaskStats(taskData);
+        setStudyData(weeklyStudy);
       } catch (error) {
-        console.error("Error fetching dashboard data:", error);
+        console.error("Dashboard fetch error:", error);
       }
     };
 
@@ -72,15 +80,19 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* ===== CHART SECTION ===== */}
-      {taskStats && (
-        <div className="mt-10">
+      {/* ===== CHARTS SECTION ===== */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10">
+        {/* Task Pie Chart */}
+        {taskStats && (
           <TaskPieChart
             completed={taskStats.completed}
             pending={taskStats.pending}
           />
-        </div>
-      )}
+        )}
+
+        {/* Study Bar Chart */}
+        {studyData && <StudyBarChart data={studyData} />}
+      </div>
     </DashboardLayout>
   );
 };
