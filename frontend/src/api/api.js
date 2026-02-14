@@ -96,11 +96,25 @@ export const getTaskStats = async () => {
   return res.json();
 };
 
-// ================= STUDY WEEKLY =================
+
+// ================= STUDY =================
+export const addStudyHours = async (hours) => {
+  const token = localStorage.getItem("token");
+
+  await fetch("http://localhost:5000/api/study", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ hours }),
+  });
+};
+
 export const getStudyWeekly = async () => {
   const token = localStorage.getItem("token");
 
-  const res = await fetch("http://localhost:5000/api/dashboard/study-weekly", {
+  const res = await fetch("http://localhost:5000/api/study/weekly", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
