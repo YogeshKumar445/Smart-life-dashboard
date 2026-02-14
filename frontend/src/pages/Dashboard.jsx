@@ -4,14 +4,18 @@ import {
   getDashboardStats,
   getTaskStats,
   getStudyWeekly,
+  getFinanceSummary,
 } from "../api/api";
+
 import TaskPieChart from "../components/TaskPieChart";
 import StudyBarChart from "../components/StudyBarChart";
+import MiniFinanceChart from "../components/MiniFinanceChart";
 
 const Dashboard = () => {
   const [stats, setStats] = useState(null);
   const [taskStats, setTaskStats] = useState(null);
   const [studyData, setStudyData] = useState(null);
+  const [financeSummary, setFinanceSummary] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,10 +23,12 @@ const Dashboard = () => {
         const dashboardData = await getDashboardStats();
         const taskData = await getTaskStats();
         const weeklyStudy = await getStudyWeekly();
+        const financeData = await getFinanceSummary();
 
         setStats(dashboardData);
         setTaskStats(taskData);
         setStudyData(weeklyStudy);
+        setFinanceSummary(financeData);
       } catch (error) {
         console.error("Dashboard fetch error:", error);
       }
@@ -47,32 +53,28 @@ const Dashboard = () => {
     <DashboardLayout>
       {/* ===== STATS CARDS ===== */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        {/* Health */}
-        <div className="bg-white p-6 rounded-2xl shadow-lg hover:scale-105 transition-all duration-300">
+        <div className="bg-white p-6 rounded-2xl shadow-lg hover:scale-105 transition">
           <h3 className="text-gray-500 font-semibold">Health Score</h3>
           <p className="text-3xl font-bold text-indigo-600 mt-3">
             {stats.health}
           </p>
         </div>
 
-        {/* Savings */}
-        <div className="bg-white p-6 rounded-2xl shadow-lg hover:scale-105 transition-all duration-300">
+        <div className="bg-white p-6 rounded-2xl shadow-lg hover:scale-105 transition">
           <h3 className="text-gray-500 font-semibold">Savings</h3>
           <p className="text-3xl font-bold text-green-600 mt-3">
             ₹{stats.savings}
           </p>
         </div>
 
-        {/* Completed Tasks */}
-        <div className="bg-white p-6 rounded-2xl shadow-lg hover:scale-105 transition-all duration-300">
+        <div className="bg-white p-6 rounded-2xl shadow-lg hover:scale-105 transition">
           <h3 className="text-gray-500 font-semibold">Tasks Completed</h3>
           <p className="text-3xl font-bold text-purple-600 mt-3">
             {stats.tasks}
           </p>
         </div>
 
-        {/* Study Hours */}
-        <div className="bg-white p-6 rounded-2xl shadow-lg hover:scale-105 transition-all duration-300">
+        <div className="bg-white p-6 rounded-2xl shadow-lg hover:scale-105 transition">
           <h3 className="text-gray-500 font-semibold">Study Hours</h3>
           <p className="text-3xl font-bold text-blue-600 mt-3">
             {stats.studyHours}
@@ -80,9 +82,8 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* ===== CHARTS SECTION ===== */}
+      {/* ===== ANALYTICS SECTION ===== */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10">
-        {/* Task Pie Chart */}
         {taskStats && (
           <TaskPieChart
             completed={taskStats.completed}
@@ -90,9 +91,18 @@ const Dashboard = () => {
           />
         )}
 
-        {/* Study Bar Chart */}
         {studyData && <StudyBarChart data={studyData} />}
       </div>
+
+      {/* ===== MINI FINANCE CHART ===== */}
+      {financeSummary && (
+        <div className="mt-10">
+          <MiniFinanceChart
+            income={financeSummary.income}
+            expense={financeSummary.expense}
+          />
+        </div>
+      )}
     </DashboardLayout>
   );
 };

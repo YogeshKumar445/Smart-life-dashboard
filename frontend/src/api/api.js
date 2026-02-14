@@ -149,5 +149,22 @@ export const getFinanceSummary = async () => {
   return res.json();
 };
 
+// ================= FINANCE CATEGORY =================
+export const getCategorySummary = async () => {
+  const token = localStorage.getItem("token");
+
+  const res = await fetch(
+    "http://localhost:5000/api/finance/category-summary",
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return res.json();
+};
+
+
 
 

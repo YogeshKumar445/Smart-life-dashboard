@@ -67,4 +67,30 @@ router.get("/summary", protect, async (req, res) => {
   res.json({ income, expense });
 });
 
+// GET category-wise expense breakdown
+router.get("/category-summary", protect, async (req, res) => {
+  const data = await Finance.aggregate([
+    {
+      $match: {
+        user: req.user._id,
+        type: "Expense",
+      },
+    },
+    {
+      $group: {
+        _id: "$category",
+        total: { $sum: "$amount" },
+      },
+    },
+  ]);
+
+  const formatted = data.map((item) => ({
+    category: item._id,
+    amount: item.total,
+  }));
+
+  res.json(formatted);
+});
+
+
 module.exports = router;
