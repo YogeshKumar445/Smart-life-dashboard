@@ -68,4 +68,17 @@ router.get("/weekly", protect, async (req, res) => {
   res.json(formatted);
 });
 
+// GET total study hours
+router.get("/total", protect, async (req, res) => {
+  const total = await Study.aggregate([
+    { $match: { user: req.user._id } },
+    { $group: { _id: null, totalHours: { $sum: "$hours" } } },
+  ]);
+
+  res.json({
+    total: total[0]?.totalHours || 0,
+  });
+});
+
+
 module.exports = router;

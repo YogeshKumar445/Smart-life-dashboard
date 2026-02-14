@@ -123,6 +123,19 @@ export const getStudyWeekly = async () => {
   return res.json();
 };
 
+export const getStudyTotal = async () => {
+  const token = localStorage.getItem("token");
+
+  const res = await fetch("http://localhost:5000/api/study/total", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.json();
+};
+
+
 // ================= FINANCE =================
 export const addFinance = async (financeData) => {
   const token = localStorage.getItem("token");
@@ -164,6 +177,8 @@ export const getCategorySummary = async () => {
 
   return res.json();
 };
+
+
 
 
 

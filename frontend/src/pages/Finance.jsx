@@ -5,32 +5,29 @@ import {
   getFinanceSummary,
   getCategorySummary,
 } from "../api/api";
-import FinanceChart from "../components/FinanceChart";
 import FinanceCategoryPie from "../components/FinanceCategoryPie";
 
 const Finance = () => {
   const [type, setType] = useState("Income");
   const [category, setCategory] = useState("");
   const [amount, setAmount] = useState("");
-  const [summary, setSummary] = useState({ income: 0, expense: 0 });
   const [categoryData, setCategoryData] = useState([]);
 
   // Fetch both summary + category data
-  useEffect(() => {
-    const fetchAll = async () => {
-      try {
-        const summaryData = await getFinanceSummary();
-        const categorySummary = await getCategorySummary();
+ useEffect(() => {
+  const fetchAll = async () => {
+    try {
+      const categorySummary = await getCategorySummary();
 
-        setSummary(summaryData);
-        setCategoryData(categorySummary);
-      } catch (error) {
-        console.error("Finance fetch error:", error);
-      }
-    };
+      setCategoryData(categorySummary);
+    } catch (error) {
+      console.error("Finance fetch error:", error);
+    }
+  };
 
-    fetchAll();
-  }, []);
+  fetchAll();
+}, []); 
+
 
   const handleAdd = async (e) => {
     e.preventDefault();
@@ -96,11 +93,7 @@ const Finance = () => {
         </button>
       </form>
 
-      {/* ===== INCOME vs EXPENSE CHART ===== */}
-      <FinanceChart
-        income={summary.income}
-        expense={summary.expense}
-      />
+     
 
       {/* ===== CATEGORY PIE CHART ===== */}
       {categoryData.length > 0 && (
