@@ -123,4 +123,31 @@ export const getStudyWeekly = async () => {
   return res.json();
 };
 
+// ================= FINANCE =================
+export const addFinance = async (financeData) => {
+  const token = localStorage.getItem("token");
+
+  await fetch("http://localhost:5000/api/finance", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(financeData),
+  });
+};
+
+export const getFinanceSummary = async () => {
+  const token = localStorage.getItem("token");
+
+  const res = await fetch("http://localhost:5000/api/finance/summary", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.json();
+};
+
+
 
