@@ -27,6 +27,8 @@ app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/tasks", require("./routes/taskRoutes"));
 app.use("/api/study", require("./routes/studyRoutes"));
 app.use("/api/finance", require("./routes/financeRoutes"));
+app.use("/api/health", require("./routes/healthRoutes"));
+
 
 
 

@@ -178,6 +178,33 @@ export const getCategorySummary = async () => {
   return res.json();
 };
 
+// ================= HEALTH =================
+export const addHealth = async (healthData) => {
+  const token = localStorage.getItem("token");
+
+  await fetch("http://localhost:5000/api/health", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(healthData),
+  });
+};
+
+export const getHealthWeekly = async () => {
+  const token = localStorage.getItem("token");
+
+  const res = await fetch("http://localhost:5000/api/health/weekly", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.json();
+};
+
+
 
 
 
